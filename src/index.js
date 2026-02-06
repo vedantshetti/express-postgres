@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import pool from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
 import errorHandler from "./middlewares/errorHandler.js";
+import createUserTable from "./data/createUserTable.js";
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(errorHandler);
 app.use("/api", userRoutes);
 
 
+createUserTable();
 // testing postgres connection
 
 app.get("/test", async(req, res) => {

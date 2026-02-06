@@ -52,34 +52,35 @@ export const getUserById = async (req, res,next) => {
 }
 
 
-export const updateUser = async (req, res,next) => {
-    const { name, email } = req.body;
-    try {
-        const user = await getUserByIdService(req.params.id, name, email);
-        if (!user) {
-            handleResponse(res, 404, "User not found");
-            return;
-        }
-        const updatedUser = await updateUserService(name, email, id);
-        handleResponse(res, 200, "User updated successfully", updatedUser);
-    } catch (error) {
-        handleResponse(res, 500, "User updating failed", error);
-        next(error);
+export const updateUser = async (req, res, next) => {
+  const { name, email } = req.body;
+  const { id } = req.params;
+
+  try {
+    const updatedUser = await updateUserService(name, email, id);
+
+    if (!updatedUser) {
+      handleResponse(res, 404, "User not found");
+      return;
     }
-}
+
+    handleResponse(res, 200, "User updated successfully", updatedUser);
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 
 export const deleteUser = async (req, res,next) => {
     try {
-        const user = await getUserByIdService(req.params.id);
-        if (!user) {
+        const deletedUser = await getUserByIdService(req.params.id);
+        if (!deletedUser) {
             handleResponse(res, 404, "User not found");
             return;
         }
-        const deletedUser = await deleteUserService(id);
         handleResponse(res, 200, "User deleted successfully", deletedUser);
     } catch (error) {
-        handleResponse(res, 500, "User deletion failed", error);
         next(error);
     }
 }
